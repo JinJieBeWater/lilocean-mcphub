@@ -7,12 +7,12 @@ volumes:
 services:
   db:
     image: pgvector/pgvector:pg16
-    container_name: pgvector
+    container_name: lilocean-pgvector
     restart: unless-stopped
     environment:
-      POSTGRES_USER: xiaozhi
-      POSTGRES_PASSWORD: xiaozhi123456
-      POSTGRES_DB: xiaozhi_mcphub
+      POSTGRES_USER: lilocean
+      POSTGRES_PASSWORD: lilocean123456
+      POSTGRES_DB: lilocean_mcphub
     # 更安全：仅本机能连数据库；如果完全不需要宿主访问，可删掉 ports 行
     ports:
       - "127.0.0.1:5432:5432"
@@ -20,14 +20,14 @@ services:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test:
-        ["CMD-SHELL", "pg_isready -U xiaozhi -d xiaozhi_mcphub -h 127.0.0.1"]
+        ["CMD-SHELL", "pg_isready -U lilocean -d lilocean_mcphub -h 127.0.0.1"]
       interval: 5s
       timeout: 3s
       retries: 20
 
   mcphub:
     image: huangjunsen/xiaozhi-mcphub:latest
-    container_name: xiaozhi-mcphub
+    container_name: lilocean-mcphub
     depends_on:
       db:
         condition: service_healthy
@@ -35,7 +35,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: "postgres://xiaozhi:xiaozhi123456@db:5432/xiaozhi_mcphub"
+      DATABASE_URL: "postgres://lilocean:lilocean123456@db:5432/lilocean_mcphub"
       NODE_ENV: production
       SMART_ROUTING_ENABLED: "false"
       # 生产建议开启：
@@ -65,7 +65,7 @@ services:
   #     - appdata:/app/data
 
   homeassistant:
-    container_name: homeassistant
+    container_name: lilocean-homeassistant
     image: ghcr.io/home-assistant/home-assistant:stable
     volumes:
       - ./config:/config

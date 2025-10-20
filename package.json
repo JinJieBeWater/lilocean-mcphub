@@ -37,7 +37,11 @@
     "prepublishOnly": "npm run build && node scripts/verify-dist.js",
     "docs:dev": "npm run --prefix documents docs:dev",
     "docs:build": "npm run --prefix documents docs:build",
-    "docs:serve": "npm run --prefix documents docs:serve"
+    "docs:serve": "npm run --prefix documents docs:serve",
+    "docker:start": "docker compose up -d",
+    "docker:watch": "docker compose up",
+    "docker:stop": "docker compose stop",
+    "docker:down": "docker compose down"
   },
   "keywords": [
     "typescript",

@@ -19,7 +19,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U xiaozhi -d xiaozhi_mcphub -h 127.0.0.1"]
+      test:
+        ["CMD-SHELL", "pg_isready -U xiaozhi -d xiaozhi_mcphub -h 127.0.0.1"]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -43,3 +44,35 @@ services:
       # OPENAI_API_KEY: "sk-..."
     volumes:
       - appdata:/app/data
+
+  # mcphub:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: lil-ocean-mcphub
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     # DATABASE_URL: "postgres://xiaozhi:xiaozhi123456@db:5432/xiaozhi_mcphub"
+  #     NODE_ENV: production
+  #     SMART_ROUTING_ENABLED: "false"
+  #     # 生产建议开启：
+  #     # JWT_SECRET: "请改成一串长随机值"
+  #     # BASE_PATH: "/mcphub"   # 如需挂到子路径
+  #     # OPENAI_API_KEY: "sk-..."
+  #   volumes:
+  #     - appdata:/app/data
+
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    # ports:
+    #   - "8123:8123"
